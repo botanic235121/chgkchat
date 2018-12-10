@@ -1,7 +1,8 @@
 package ru.chgkchat.core.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -11,27 +12,32 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "chat_id")
-    private long chat_id;
+    private Long chatId;
 
     private String chatName;
 
-    private Date createChatDate;
+    private Instant createChatDate;
 
-    @OneToMany(mappedBy = "chat_id", cascade = CascadeType.ALL) // field CascadeType: if chat will deleted all users also will deleted.
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL) // field CascadeType: if chat will deleted all users also will deleted.
     private Set<User> users;
 
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    private Set<Message> messages;
 
-    public Chat(String chatName, Date createChatDate) {
+    public Chat() {
+    }
+
+    public Chat(String chatName, Instant createChatDate) {
         this.chatName = chatName;
         this.createChatDate = createChatDate;
     }
 
-    public long getChat_id() {
-        return chat_id;
+    public Long getChatId() {
+        return chatId;
     }
 
-    public void setChat_id(long chat_id) {
-        this.chat_id = chat_id;
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     public String getChatName() {
@@ -42,11 +48,11 @@ public class Chat {
         this.chatName = chatName;
     }
 
-    public Date getCreateChatDate() {
+    public Instant getCreateChatDate() {
         return createChatDate;
     }
 
-    public void setCreateChatDate(Date createChatDate) {
+    public void setCreateChatDate(Instant createChatDate) {
         this.createChatDate = createChatDate;
     }
 
@@ -56,5 +62,41 @@ public class Chat {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Chat chat = (Chat) o;
+        return chatId.equals(chat.chatId) &&
+                chatName.equals(chat.chatName) &&
+                createChatDate.equals(chat.createChatDate) &&
+                Objects.equals(users, chat.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chatId);
+    }
+
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "chat_id=" + chatId +
+                ", chatName='" + chatName + '\'' +
+                ", createChatDate=" + createChatDate +
+                ", users=" + users +
+                '}';
     }
 }

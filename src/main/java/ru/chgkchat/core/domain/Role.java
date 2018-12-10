@@ -1,8 +1,10 @@
 package ru.chgkchat.core.domain;
 
-import javax.persistence.*;
-import java.util.Set;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -12,19 +14,11 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
-
     public Role() {
     }
 
     public Role(String roleName) {
         this.roleName = roleName;
-    }
-
-    public Role(String roleName, Set<User> users) {
-        this.roleName = roleName;
-        this.users = users;
     }
 
     public String getRoleName() {
@@ -35,11 +29,25 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Role role = (Role) o;
+        return Objects.equals(roleName, role.roleName);
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    @Override
+    public int hashCode() {
+        return Objects.hash(roleName);
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleName='" + roleName + '\'' +
+                '}';
     }
 }

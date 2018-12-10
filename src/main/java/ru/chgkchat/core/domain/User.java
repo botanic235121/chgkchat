@@ -1,7 +1,8 @@
 package ru.chgkchat.core.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -11,49 +12,50 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    private long user_id;
+    private Long userId;
 
-    private String userName;
+    private String username;
 
     private String password;
 
-    private Date registration;
+    private Instant registration;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Message> messageId;
 
     @ManyToOne
     @JoinColumn(name = "chat_id")
-    private Chat chat_id;
-
+    private Chat chat;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id_role", referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_name_user", referencedColumnName = "role_name"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+               inverseJoinColumns = @JoinColumn(name = "role_name", referencedColumnName = "role_name"))
     private Set<Role> roles;
 
-    public User(){
+    public User() {
 
     }
 
-    public User(String userName, String password, Date registration) {
-        this.userName = userName;
+    public User(String username, String password, Instant registration) {
+        this.username = username;
         this.password = password;
         this.registration = registration;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -64,20 +66,20 @@ public class User {
         this.password = password;
     }
 
-    public Date getRegistration() {
+    public Instant getRegistration() {
         return registration;
     }
 
-    public void setRegistration(Date registration) {
+    public void setRegistration(Instant registration) {
         this.registration = registration;
     }
 
-    public Chat getChat_id() {
-        return chat_id;
+    public Chat getChat() {
+        return chat;
     }
 
-    public void setChat_id(Chat chat_id) {
-        this.chat_id = chat_id;
+    public void setChat(Chat chatId) {
+        this.chat = chatId;
     }
 
     public Set<Role> getRoles() {
@@ -86,5 +88,45 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Message> getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Set<Message> messageId) {
+        this.messageId = messageId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        User user = (User) o;
+        return userId.equals(user.userId) &&
+                username.equals(user.username) &&
+                password.equals(user.password) &&
+                registration.equals(user.registration) &&
+                Objects.equals(chat, user.chat) &&
+                roles.equals(user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", registration=" + registration +
+                ", chatId=" + chat +
+                ", roles=" + roles +
+                '}';
     }
 }
