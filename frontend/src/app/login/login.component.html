@@ -1,8 +1,27 @@
-<div>
-
-  <input type="text" [(ngModel)]="username" (keyup)="$event.keyCode == 13 ? connect(username) : null"/>
-  <button (click)="connect(username)">
-    Connect
-  </button>
-  {{message}}
-</div>
+<mat-grid-list [cols]="1" rowHeight="100px" class="login-container">
+  <mat-grid-tile>
+    <img src="assets/img/owl.png" height="100%">
+  </mat-grid-tile>
+  <mat-grid-tile style="text-align: left">
+    <div class="login-header">
+      Введите Имя для входа в Private chgk chat
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field class="full-width">
+      <!--"keyCode" it is a keyBoardEvent , "13" it is button "Enter"-->
+      <input matInput placeholder="Username" class="login-input"
+             type="text" [(ngModel)]="username" (keyup)="$event.keyCode == 13 ? connect(username) : null">
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button class="full-width" (click)="connect(username)">
+      Вход
+    </button>
+  </mat-grid-tile>
+  <mat-grid-tile *ngIf="message !== undefined && message !== null">
+    <span class="error-message">
+      {{message}}
+    </span>
+  </mat-grid-tile>
+</mat-grid-list>

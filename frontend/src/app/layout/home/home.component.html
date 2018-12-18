@@ -1,6 +1,60 @@
-<div>
-  Welcome, {{username}} |
-  <a (click)="logout()" class="hand">
-    Logout
-  </a>
+<div class="main-container">
+  <div class="header-container">
+    <mat-grid-list cols="3" rowHeight="100px">
+      <mat-grid-tile>
+        <div style="position: absolute; left: 0px;">
+          <img src="assets/img/logo.png" height="80px">
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="user-header">
+          Other user
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile class="user-header">
+        Welcome, {{username}}|
+        <a (click)="logout()" class="hand">
+          Logout
+        </a>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <table class="chat-table">
+    <tr>
+      <td rowspan="2" class="user-list-col">
+        <mat-list>
+          <mat-list-item *ngFor="let user of users" class="user-item">
+          <mat-icon mat-list-icon="">
+            person
+          </mat-icon>
+            <h4 mat-line>
+              {{user.username}}
+            </h4>
+          </mat-list-item>
+        </mat-list>
+      </td>
+      <td class="message-col">
+        <mat-list class="message-container">
+          <mat-list-item *ngFor="let message of messages" class="message-item">
+            <mat-icon mat-list-icon>
+              chat
+            </mat-icon>
+            <h4 mat-line>
+              {{message}}
+            </h4>
+          </mat-list-item>
+        </mat-list>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field style="width: 85%;">
+          <input matInput placeholder="Message" [disabled]="false" class="message-input">
+        </mat-form-field>
+        <button mat-raised-button [disabled]="false" style="width: 12%;">
+          Send
+        </button>
+      </td>
+    </tr>
+  </table>
 </div>
